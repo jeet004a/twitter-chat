@@ -106,10 +106,10 @@ const UserList = ({searchKey,socket}) => {
     useEffect(()=>{
         socket.on('received-message',(message)=>{
             const selectedChat=store.getState().userReducer.selectedChats
-            const allChats=store.getState().userReducer.allChats
+            let allChats=store.getState().userReducer.allChats
             
             if(selectedChat?._id!==message.chatId){
-                const updatedchats =allChats.map(chat=>{
+                let updatedchats =allChats.map(chat=>{
                     if(chat._id ===message.chatId){
                         return{
                             ...chat,
@@ -121,8 +121,17 @@ const UserList = ({searchKey,socket}) => {
                 }
                 // return chat
             )
-            dispatch(setAllChats(updatedchats))
+            allChats=updatedchats
         }
+        // 1. FIND THE LATEST CHAT
+        const latestChat=allChats.find(chat=> chat._id===message.chatId)
+
+        //2. GET ALL OTHER CHATS
+        const otherChats=allChats.filter(chat=>chat._id!=message.chatId)
+
+        //3. CREATE A NEW ARRAY WITH LATEST CHAT WITH FIRST THEN ALL OTHERS CHAT
+        allChats=[latestChat,...otherChats]
+        dispatch(setAllChats(allChats))
             
         })
     },[])
