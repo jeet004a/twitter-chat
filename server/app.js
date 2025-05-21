@@ -13,7 +13,7 @@ import chatRoutes from './controllers/chatController.js'
 import messageRoutes from './controllers/messageController.js'
 import { Server } from 'socket.io';
 
-
+let onlineUser = []
 
 app.use(express.json())
 app.use(cors())
@@ -55,11 +55,17 @@ io.on('connection', (socket) => {
     socket.on('join-room', (userid) => {
         socket.join(userid)
     })
+
+    //SOCKET ONCE SEND MESSAGES ONCE AND AVOID SOCKET OFF ON USER CLIENT
     socket.on('send-message', (message) => {
         // console.log(message)
         io.to(message.members[0])
             .to(message.members[1])
             .emit('received-message', message)
+
+        io.to(message.members[0])
+            .to(message.members[1])
+            .emit('set-message-count', message)
     })
 
     socket.on('clear-unread-message', data => {
@@ -69,6 +75,19 @@ io.on('connection', (socket) => {
 
     socket.on('user-typing', data => {
         io.to(data.members[0]).to(data.members[1]).emit('started-typing', data)
+    })
+
+    socket.on('user-login', userId => {
+        if (!onlineUser.includes(userId)) {
+            onlineUser.push(userId)
+        }
+        socket.emit('online-users', onlineUser)
+    })
+
+    socket.on('user-offline', userId => {
+        onlineUser.splice(onlineUser.indexOf(userId), 1)
+
+        io.emit('online-users-updated', onlineUser)
     })
 });
 

@@ -6,6 +6,7 @@ import {showLoader,hideLoader} from '../../../redux/loderSlicer'
 import {setAllChats} from '../../../redux/userSlicer'
 import moment from 'moment'
 import store from '../../../redux/store'
+import EmojiPicker from 'emoji-picker-react'
 
 
 const Chatarea = ({socket}) => {
@@ -15,6 +16,8 @@ const Chatarea = ({socket}) => {
     const [message, setMessage] = useState('')
     const [allMessage, setAllMessage] = useState([])
     const [isTyping,setIsTyping]=useState(false)
+    const [showEmojiPicker, setShowEmojiPicker]=useState(false)
+    const [data,setData]=useState(null)
 
     const sendMessage=async()=>{
       try {
@@ -38,6 +41,7 @@ const Chatarea = ({socket}) => {
 
         if(response.success){
           setMessage('')
+          setShowEmojiPicker(false)
         }
       } catch (error) {
         // dispatch(hideLoader())
@@ -100,7 +104,7 @@ const Chatarea = ({socket}) => {
       //Socket off is working if any event is already presnet with the same name it will close first and tooks the new raised event
       //selectedChat :- its used for add messages on selected user feed on real time
       // .off('received-message')
-      socket.on('received-message',(message)=>{
+      socket.off('received-message').on('received-message',(message)=>{
         const selectedChat=store.getState().userReducer.selectedChats
         if(selectedChat._id===message.chatId){
           setAllMessage(prevmsg=> [...prevmsg,message])
@@ -134,6 +138,7 @@ const Chatarea = ({socket}) => {
       })
 
       socket.on('started-typing',(data)=>{
+        setData(data)
         if(selectedChats._id==data.chatId && data.sender!==user._id){
           setIsTyping(true)
           setTimeout(() => {
@@ -204,9 +209,12 @@ const Chatarea = ({socket}) => {
                       <div className="send-message">Hi There</div>
                   </div> */}
                 <div className="typing-indicator">
-                  {isTyping && <i>typing ...</i>}
+                  {isTyping && selectedChats.members.map(m=>m._id).includes(data?.sender) && <i>typing ...</i>}
                 </div>
             </div>
+            {showEmojiPicker && <div>
+              <EmojiPicker onEmojiClick={(e)=>setMessage(message+e.emoji)}></EmojiPicker>
+            </div>}
           <div className="send-message-div">
               <input type="text" className="send-message-input" placeholder="Type a message"
               value={message} 
@@ -219,6 +227,8 @@ const Chatarea = ({socket}) => {
                   })
                 }
               }/>
+              <button className="fa fa-smile-o send-emoji-btn"  onClick={()=>{setShowEmojiPicker(!showEmojiPicker)}} 
+              aria-label="Send message"></button>
               <button className="fa fa-paper-plane send-message-btn"  onClick={sendMessage} aria-label="Send message"></button>
           </div>
         </div>

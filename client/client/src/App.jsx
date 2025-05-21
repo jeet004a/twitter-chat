@@ -8,6 +8,7 @@ import {Toaster} from 'react-hot-toast'
 import Protected from './components/protectedRoute'
 import Loader from './components/loader'
 import {useSelector} from 'react-redux'
+import Profile from './pages/profile'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -21,6 +22,12 @@ function App() {
           <Route path='/' element={
             <Protected>
               <Home/>
+              <Profile/>
+            </Protected>
+            }></Route>
+            <Route path='/profile' element={
+            <Protected>
+              <Profile/>
             </Protected>
             }></Route>
           <Route path='/login' element={<Login/>}></Route>

@@ -7,7 +7,8 @@ import {createNewChat} from '../../../apiCalls/chat'
 import moment from 'moment'
 import store from '../../../redux/store'
 // import 
-const UserList = ({searchKey,socket}) => {
+const UserList = ({searchKey,socket, onlineUser}) => {
+    // console.log(onlineUser)
     const {allUsers}=useSelector(state=>state.userReducer)
     const {allChats, user:currentUser}=useSelector(state=>state.userReducer)
     const {selectedChats}=useSelector(state=>state.userReducer)
@@ -104,10 +105,9 @@ const UserList = ({searchKey,socket}) => {
     }
 
     useEffect(()=>{
-        socket.on('received-message',(message)=>{
+        socket.off('set-message-count').on('set-message-count',(message)=>{
             const selectedChat=store.getState().userReducer.selectedChats
             let allChats=store.getState().userReducer.allChats
-            
             if(selectedChat?._id!==message.chatId){
                 let updatedchats =allChats.map(chat=>{
                     if(chat._id ===message.chatId){
@@ -157,7 +157,9 @@ const UserList = ({searchKey,socket}) => {
             <div className="user-search-filter" onClick={()=>openChat(user._id)} key={user._id}>
                 <div className={isSelectedChat(user) ?  "selected-user": "filtered-user"}>
                     <div className="filter-user-display">
-                        <img src={user.profilePic} alt="Profile Pic" className="user-profile-image"/> 
+                        <img src={user.profilePic} alt="Profile Pic" className="user-profile-image" 
+                        style={onlineUser.includes(user._id) ? {border: '#82e0aa 3px solid'}: {}}
+                        /> 
                         {/* <div className="user-default-profile-pic">
                             MJ
                         </div> */}
