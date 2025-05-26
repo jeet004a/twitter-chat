@@ -1,6 +1,7 @@
 import React,{useState,useEffect} from 'react'
 import {useSelector} from 'react-redux'
 import moment from 'moment'
+import {uploadProfilePic} from '../../apiCalls/user'
 const Profile = () => {
     const {user} =useSelector(state=>state.userReducer)
     const [image,setImage]=useState('')
@@ -19,9 +20,12 @@ const Profile = () => {
 
     let onFileSelect=async(e)=>{
         const file=e.target.files[0]
+        const formData = new FormData();
+        formData.append('image', file)
+        await uploadProfilePic(formData)
         const reader=new FileReader(file)
         reader.readAsDataURL(file)
-
+        // console.log('file',file)
         reader.onloadend=async()=>{
             setImage(reader.result)
         }

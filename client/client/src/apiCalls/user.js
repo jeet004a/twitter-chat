@@ -20,3 +20,12 @@ export const getAllUsers = async() => {
         console.log(error)
     }
 }
+
+export const uploadProfilePic = async(file) => {
+    try {
+        let response = await axiosInstance.post(DEV_URL + 'api/user/profile-image', file, )
+        console.log('xxx', )
+    } catch (error) {
+        console.log(error)
+    }
+}
