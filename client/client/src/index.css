@@ -9,6 +9,7 @@
     
     body {
         overflow-y: hidden;
+        /* background-color: black; */
     }
     /*******************************************************
 *************CSS STYLES FOR LOGIN & SIGNUP**************
@@ -211,6 +212,7 @@
         color: #28282B;
         font-size: 25px;
         font-weight: bold;
+        align-items: center;
     }
     
     i {

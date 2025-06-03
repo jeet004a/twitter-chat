@@ -28,3 +28,11 @@ export const loginUser = async(user) => {
         console.log('error while fetching data from signup route', error)
     }
 }
+
+import axios from 'axios'
+
+const api = axios.create({
+    baseURL: 'http://localhost:3000/api/auth/gauth'
+})
+
+export const googleAuth = (code) => api.get(`?code=${code}`)

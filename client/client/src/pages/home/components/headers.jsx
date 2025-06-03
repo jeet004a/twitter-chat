@@ -1,14 +1,16 @@
 import React from 'react'
 import {useSelector} from 'react-redux'
 import {useNavigate} from 'react-router-dom'
+import { FaWhatsapp } from "react-icons/fa";
 const Headers = ({socket}) => {
   const navigate=useNavigate()
     const {user}=useSelector(state=> state.userReducer)
     // console.log(user)
     function getFullName(){
-        let firstname=user?.firstname.slice(0,1).toUpperCase()+user?.firstname.slice(1).toLowerCase()
-        let lastname=user?.lastname.slice(0,1).toUpperCase()+user?.lastname.slice(1).toLowerCase()
-        return firstname+ " "+lastname
+        // let firstname=user?.firstname.slice(0,1).toUpperCase()+user?.firstname.slice(1).toLowerCase()
+        // let lastname=user?.lastname.slice(0,1).toUpperCase()+user?.lastname.slice(1).toLowerCase()
+        // return firstname+ " "+lastname
+        return user?.firstname 
     }
 
     function getInitials(){
@@ -26,7 +28,8 @@ const Headers = ({socket}) => {
   return (
     <div className="app-header">
     <div className="app-logo">
-        <i className="fa fa-comments" aria-hidden="true"></i>
+        {/* <i className="fa fa-comments" aria-hidden="true"></i> */}
+          <FaWhatsapp />
           WhatsApp
         </div>
     <div className="app-user-profile">

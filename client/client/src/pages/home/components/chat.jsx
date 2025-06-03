@@ -166,9 +166,10 @@ const Chatarea = ({socket}) => {
 
 
     let formatName=(user)=>{
-        let fname=user?.firstname.at(0).toUpperCase()+ user?.firstname.slice(1).toLowerCase()
-        let lname=user?.lastname.at(0).toUpperCase()+ user?.lastname.slice(1).toLowerCase()
-        return fname+ ' '+lname
+        // let fname=user?.firstname.at(0).toUpperCase()+ user?.firstname.slice(1).toLowerCase()
+        // let lname=user?.lastname.at(0).toUpperCase()+ user?.lastname.slice(1).toLowerCase()
+        // return fname+ ' '+lname
+        return user?.firstname
     }
 
 
@@ -177,7 +178,6 @@ const Chatarea = ({socket}) => {
       const msgContainer=document.getElementById('main-chat-area')
       msgContainer.scrollTop=msgContainer.scrollHeight
     },[allMessage,isTyping])
-
 
 
   return (

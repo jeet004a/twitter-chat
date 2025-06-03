@@ -96,11 +96,16 @@ const UserList = ({searchKey,socket, onlineUser}) => {
     function getData(){
         if(searchKey==""){
             return allChats
-        }else{
-             allUsers.filter(user=> {
-                    return user.firstname.toLowerCase().includes(searchKey.toLowerCase()) &&
-                    user.lastname.toLowerCase().includes(searchKey.toLowerCase())
-                })
+        }
+        else{
+            //  allUsers.filter(user=> {
+            //         return user.firstname.toLowerCase().includes(searchKey.toLowerCase()) &&
+            //         user.lastname.toLowerCase().includes(searchKey.toLowerCase())
+            //     })
+            return allUsers.filter(user => {
+                return user.firstname?.toLowerCase().includes(searchKey?.toLowerCase()) ||
+                    user.lastname?.toLowerCase().includes(searchKey?.toLowerCase());
+            });
         }
     }
 

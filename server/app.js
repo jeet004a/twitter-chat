@@ -25,6 +25,7 @@ app.use('/api/chat', chatRoutes)
     //All Message routers
 app.use('/api/message', messageRoutes)
 
+
 app.get('/', (req, res, next) => {
     try {
         return res.status(200).json({ message: "Server is healthy" })
